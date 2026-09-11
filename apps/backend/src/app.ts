@@ -15,7 +15,7 @@ export function createApp(): Express {
   app.use(express.json());
   app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
-  app.use("/api", apiRouter);
+  app.use("/api/v1", apiRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
