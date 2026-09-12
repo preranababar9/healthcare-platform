@@ -1,9 +1,11 @@
 import { createApp } from "./app.js";
-import { connectDatabase } from "./config/db.js";
+import { connectDatabase, disconnectDatabase } from "./config/db.js";
 import { env } from "./config/env.js";
+import { connectRedis, disconnectRedis } from "./config/redis.js";
 
 async function main(): Promise<void> {
   await connectDatabase();
+  await connectRedis();
 
   const app = createApp();
 
@@ -13,7 +15,11 @@ async function main(): Promise<void> {
 
   const shutdown = (signal: string) => {
     console.log(`[server] received ${signal}, shutting down`);
-    server.close(() => process.exit(0));
+    server.close(async () => {
+      await disconnectRedis();
+      await disconnectDatabase();
+      process.exit(0);
+    });
   };
 
   process.on("SIGINT", () => shutdown("SIGINT"));

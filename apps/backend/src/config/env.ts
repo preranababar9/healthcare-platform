@@ -12,6 +12,7 @@ export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   port: Number(process.env.PORT ?? 4000),
   mongodbUri: requireEnv("MONGODB_URI"),
+  redisUrl: requireEnv("REDIS_URL"),
   corsOrigin: process.env.CORS_ORIGIN ?? "http://localhost:3000",
 };
 
